@@ -33,7 +33,8 @@ class Collection(models.Model):
 class ProductManager(models.Manager):
     def average_inventory(self):
         # {'average_inventory' : 50 }
-        return self.aggregate(average_inventory=models.Avg('inventory'))['average_inventory']
+        return self.aggregate(average_inventory=models.Max('inventory'))['average_inventory']
+#aggregate(count,avg,sum,min ,max)
 
 
 class Product(models.Model):
