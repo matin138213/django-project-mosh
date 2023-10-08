@@ -1,3 +1,5 @@
-**/migrations/**
+**/migrations/*.py
 .env
 requirements.txt
+.idea/
+venv/
