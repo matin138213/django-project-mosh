@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$USER_HOME$/Downloads/store_customer.sql" dialect="PostgreSQL" />
+    <file url="file://$USER_HOME$/Downloads/store_customers (1).sql" dialect="Redshift" />
   </component>
 </project>

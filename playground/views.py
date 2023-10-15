@@ -13,8 +13,6 @@ from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 def say_hello(request):
-    # inventory= Product.objects.average_inventory()
-    # return render(request, 'hello.html', {'name': 'matin','products':inventory})
     customer = Order.objects.count()
     customer = Product.objects.average_inventory()
     return render(request, 'hello.html', {'name': 'matin', 'customers': customer})
@@ -51,3 +49,5 @@ def say_hello(request):
     # queryset=Product.objects.annotate(
     #     discounted_price=discounted_price
     # )
+    # inventory= Product.objects.average_inventory()
+    # return render(request, 'hello.html', {'name': 'matin','products':inventory})
