@@ -18,7 +18,7 @@ class Address(models.Model):
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
-    featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, related_name='+', null=True)
+    featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, related_name='products', null=True)
 
     def __str__(self):
         return self.title
@@ -45,8 +45,9 @@ class Product(models.Model):
     unit_price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(1)])
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
-    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, null=True, blank=True)
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, null=True, blank=True,related_name='product')
     promotions = models.ManyToManyField(Promotion, blank=True)
+
 
     def __str__(self):
         return self.title
@@ -102,7 +103,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     objects=OrderManager()
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True,related_name='orderitems')
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
