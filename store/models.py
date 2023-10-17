@@ -34,7 +34,9 @@ class ProductManager(models.Manager):
     def average_inventory(self):
         # {'average_inventory' : 50 }
         return self.aggregate(average_inventory=models.Max('inventory'))['average_inventory']
-#aggregate(count,avg,sum,min ,max)
+
+
+# aggregate(count,avg,sum,min ,max)
 
 
 class Product(models.Model):
@@ -45,9 +47,8 @@ class Product(models.Model):
     unit_price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(1)])
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
-    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, null=True, blank=True,related_name='product')
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT, null=True, blank=True, related_name='product')
     promotions = models.ManyToManyField(Promotion, blank=True)
-
 
     def __str__(self):
         return self.title
@@ -55,6 +56,12 @@ class Product(models.Model):
     class Meta:
         ordering = ['title']
 
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='review')
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    date = models.DateField(auto_now_add=True)
 
 
 class Customer(models.Model):
@@ -80,6 +87,7 @@ class Customer(models.Model):
     class Meta:
         ordering = ['first_name', 'last_name']
 
+
 class OrderManager(models.Manager):
     def count(self):
         return self.aggregate(count=models.Count('id'))['count']
@@ -94,16 +102,16 @@ class Order(models.Model):
         (PAYMENT_STATUS_COMPLETE, 'complete'),
         (PAYMENT_STATUS_FAILED, 'failed')
     ]
-    objects=OrderManager()
+    objects = OrderManager()
     place_at = models.DateTimeField(auto_now_add=True)
     payment_status = models.CharField(max_length=1, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_STATUS_PENDING)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, null=True, blank=True)
 
 
 class OrderItem(models.Model):
-    objects=OrderManager()
+    objects = OrderManager()
     order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True,related_name='orderitems')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True, related_name='orderitems')
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
