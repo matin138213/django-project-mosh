@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'playground',
     "debug_toolbar",
     'store',
+    'django_filters',
     'store_custom',
     'tags',
     'likes',
