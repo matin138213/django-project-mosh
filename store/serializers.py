@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from decimal import Decimal
 
-from store.models import Product, Collection, Review, Cart, CartItem
+from store.models import Product, Collection, Review, Cart, CartItem, Customer
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -97,6 +97,14 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
         model = CartItem
         fields = ['quantity']
 
+
+class CustomerSerializer(serializers.ModelSerializer):
+
+    user_id = serializers.IntegerField()
+
+    class Meta:
+        model = Customer
+        fields = ['id', 'user_id', 'phone', 'birth_date', 'membership']
 # id = serializers.IntegerField()
 # title = serializers.CharField(max_length=255)
 # price = serializers.DecimalField(max_digits=6, decimal_places=2, source='unit_price')
