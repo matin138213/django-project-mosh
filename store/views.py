@@ -121,6 +121,7 @@ class OrderViewSet(ModelViewSet):
         serializer = OrderSerializer(order)
         return Response(serializer.data)
 
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateOrderSerializer
