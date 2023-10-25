@@ -3,7 +3,6 @@ from rest_framework import serializers
 
 
 class UserCreateSerializer(BaseUserCreateSerializer):
-    brith_date = serializers.DateField(read_only=True)
 
     class Meta(BaseUserCreateSerializer.Meta):
         fields = ['id', 'username', 'password', 'email', 'first_name', 'last_name']

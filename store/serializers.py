@@ -2,6 +2,7 @@ from rest_framework import serializers
 from decimal import Decimal
 from django.db import transaction
 from .models import Product, Collection, Review, Cart, CartItem, Customer, Order, OrderItem
+from .signals import order_created
 
 
 class CollectionSerializer(serializers.ModelSerializer):
@@ -122,8 +123,21 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['id', 'customer', 'place_at', 'payment_status', 'items']
 
 
+class UpdateOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['payment_status']
+
+
 class CreateOrderSerializer(serializers.Serializer):
     cart_id = serializers.UUIDField()
+
+    def validate_cart_id(self, cart_id):
+        if not Cart.objects.filter(pk=cart_id).exists():
+            raise serializers.ValidationError('no cart_id given id')
+        if CartItem.objects.filter(cart_id=cart_id).count() == 0:
+            raise serializers.ValidationError('the cart_id empty')
+        return cart_id
 
     def save(self, **kwargs):
         with transaction.atomic():
@@ -141,6 +155,7 @@ class CreateOrderSerializer(serializers.Serializer):
                 for item in cart_items]
             OrderItem.objects.bulk_create(order_items)
             Cart.objects.filter(pk=cart_id).delete()
+            order_created.send_robust(self.__class__,order=order)
             return order
 
 # id = serializers.IntegerField()
