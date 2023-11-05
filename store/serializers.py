@@ -75,7 +75,6 @@ class AddCartItemSerializer(serializers.ModelSerializer):
         return value
 
     def save(self, **kwargs):
-        cart_id = self.context['cart_id']
         product_id = self.validated_data['product_id']
         quantity = self.validated_data['quantity']
         try:
@@ -189,6 +188,6 @@ class CreateOrderSerializer(serializers.Serializer):
 #     return product
 #
 # def update(self, instance, validated_data):
-#     instance.unit_price = validated_data.get('unit_price')  # def update for  put/pacth method http
+#     instance.unit_price = validated_data.get('unit_price')
 #     instance.save()
 #     return instance

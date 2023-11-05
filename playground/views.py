@@ -6,6 +6,8 @@ from django.db.models import Value, F, Func, Count, ExpressionWrapper, DecimalFi
 from django.db.models.aggregates import Count
 from django.contrib.contenttypes.models import ContentType
 
+from .tasks import notify_customers
+
 
 # from django.db.models import Q, F
 # from django.core.exceptions import ObjectDoesNotExist
@@ -13,9 +15,8 @@ from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 def say_hello(request):
-    customer = Order.objects.count()
-    customer = Product.objects.average_inventory()
-    return render(request, 'hello.html', {'name': 'matin', 'customers': customer})
+    notify_customers.delay('hello')
+    return render(request, 'hello.html', {'name': 'matin'})
     # queryset = Product.objects.filter(title__icontains='coffe')
     # queryset=Product.objects.filter(Q(inventory__lt=1,0)& Q(unit_price__lt=20))
     # queryset=Product.objects.filter(description__icontains=True)
